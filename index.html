@@ -17,18 +17,26 @@
       --column: 515px;                 /* width of the text block in the design */
       --display: "Jacques Francois Shadow", "Times New Roman", serif;
       --body: "Times New Roman", Times, serif;
+      --u: 1px;                        /* one design pixel; shrinks on phones (see bottom) */
     }
 
     * { box-sizing: border-box; }
+
+    html {
+      -webkit-text-size-adjust: 100%;  /* stop phones from resizing some text on their own */
+      text-size-adjust: 100%;
+    }
 
     html, body { margin: 0; }
 
     body {
       min-height: 100vh;
+      min-height: 100svh;
       background: var(--bg);
       color: var(--text);
       font-family: var(--body);
-      overflow-x: clip;                /* rotated blocks poke slightly past the column */
+      overflow-x: hidden;              /* rotated blocks poke slightly past the column */
+      overflow-x: clip;
     }
 
     main {
@@ -40,19 +48,19 @@
     /* ---------- portrait ---------- */
     .portrait {
       display: block;
-      width: 100px;
-      height: 136px;
+      width: calc(100 * var(--u));
+      height: calc(136 * var(--u));
       margin: 0 auto;
       object-fit: cover;
     }
 
     /* ---------- name ---------- */
     h1 {
-      margin: 16px 0 0;
+      margin: calc(16 * var(--u)) 0 0;
       font-family: var(--display);
-      font-size: 16px;
+      font-size: calc(16 * var(--u));
       font-weight: 400;
-      line-height: 20px;
+      line-height: 1.25;
       letter-spacing: 1.02em;          /* Figma: 102% */
       margin-right: -1.02em;           /* cancel the trailing gap so the name stays centred */
       text-align: center;
@@ -62,8 +70,8 @@
     /* ---------- statement ---------- */
     .statement p {
       margin: 0;
-      font-size: 14px;
-      line-height: 16.5px;
+      font-size: calc(14 * var(--u));
+      line-height: calc(16.5 * var(--u));
       text-align: justify;
     }
 
@@ -75,8 +83,8 @@
     nav {
       margin: 25px 0 0 231px;
       font-family: var(--display);
-      font-size: 16px;
-      line-height: 16px;
+      font-size: calc(16 * var(--u));  /* same size as the name */
+      line-height: 1;
       white-space: nowrap;
     }
 
@@ -93,24 +101,38 @@
 
     .egg {
       display: inline-block;
-      margin: 2px 0 0 1px;
-      font-size: 13px;
-      line-height: 16px;
+      margin: calc(2 * var(--u)) 0 0 1px;
+      font-size: calc(13 * var(--u));
+      line-height: calc(16 * var(--u));
     }
 
-    /* ---------- small screens ---------- */
+    /* ---------- phones ----------
+       The whole composition is sized in --u. On a phone --u shrinks just enough
+       for the page to fit one screen (390 x 660 is the size it fits at full scale),
+       so there is nothing to scroll. It never goes below 75%. */
     @media (max-width: 640px) {
-      main { padding-top: 72px; }
-      .tilt-a { transform: rotate(-5deg); }
-      .tilt-b { transform: rotate(-2deg); margin-top: 14px; }
-      .tilt-c { margin-top: 18px; }
-      nav { margin-left: 0; margin-top: 36px; text-align: center; }
-      nav a { margin: 0 auto; }
-    }
+      :root { --u: clamp(.75px, min(100vw / 390, 100vh / 660), 1px); }
+      @supports (height: 100svh) {
+        :root { --u: clamp(.75px, min(100vw / 390, 100svh / 660), 1px); }
+      }
 
-    @media (max-width: 420px) {
-      h1 { letter-spacing: .6em; margin-right: -.6em; }
-      nav { font-size: 14px; }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      main {
+        width: calc(100% - 48 * var(--u));
+        padding: calc(20 * var(--u)) 0;
+      }
+
+      .tilt-a { transform: rotate(-5deg); margin-top: calc(22 * var(--u)); }
+      .tilt-b { transform: rotate(-2deg); margin-top: calc(12 * var(--u)); }
+      .tilt-c { margin-top: calc(16 * var(--u)); }
+
+      nav { margin: calc(26 * var(--u)) 0 0; text-align: center; }
+      nav a { margin: 0 auto; }
     }
   </style>
 </head>
@@ -127,7 +149,7 @@
 
       <div class="tilt-b">
         <p>In my performances, I translates the body into machine-readable form. Using motion capture and biometric data, I records movement, interaction, and bodily response, asking what is preserved (and what is lost) when embodied experience is rendered as data.</p>
-        <p>In my sculptures, that exchange reverses: animatronic objects (a grain of rice, a shrimp, a tooth, a doll) are built to perform vulnerability, violence, and intimacy without a human body driving them, staging what could be called object performance.</p>
+        <p>In my sculptures, that exchange reverses: animatronic objects (a grain of rice, a shrimp, a tooth, a doll) are built to perform vulnerability, violence, and intimacy without a human body driving them, staging what could be called <em>object performance</em>.</p>
       </div>
 
       <div class="tilt-c">
@@ -137,8 +159,8 @@
 
     <nav aria-label="Contact and works">
       <!-- The address is assembled on click so it isn't sitting in the HTML for scrapers. -->
-      <a href="#" id="email" data-user="dieuhuongvu" data-domain="gmail.com">dieuhuongvu[at]gmail.com,,,,,,,,,</a>
-      <a href="https://docs.google.com/presentation/d/1VkCakAbo8LccDo6KXDfwtFg2JV5ExQg3uwbsRpbo1bA/edit?usp=sharing" target="_blank" rel="noopener">selected works,,,,,,</a>
+      <a href="#" id="email" data-user="dieuhuongvu31" data-domain="gmail.com">dieuhuongvu31[at]gmail.com.........</a>
+      <a href="https://docs.google.com/presentation/d/1VkCakAbo8LccDo6KXDfwtFg2JV5ExQg3uwbsRpbo1bA/edit?usp=sharing" target="_blank" rel="noopener">selected works......</a>
       <a class="egg" href="https://www.instagram.com/eggreligion/" target="_blank" rel="noopener" aria-label="Instagram: @eggreligion">🥚</a>
     </nav>
   </main>
